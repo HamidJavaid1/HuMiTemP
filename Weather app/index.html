@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HuMiTemP</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="https://www.shutterstock.com/image-vector/cartoon-kid-hot-cold-weather-600nw-95926168.jpg" type="image/x-icon">
+</head>
+<body>
+    <div class="weather-form">
+        <input type="text" id="city-input" placeholder="Enter city name">
+        <button onclick="getweather()">Get HuMiTemP</button>
+    </div>
+    <div class="container" id="container" style="display: none;">
+     <h1 id="name">City name</h1>
+     <h2 id="temp">Temperature 45c</h2>
+     <h2 id="humidity">Humidity</h2>
+     <h2 id="condition">condition</h2>
+     <div class="background-img">
+     <img src="" id="logo-condition" alt="" style="display: none;">
+    </div>
+    </div>
+    <h2 id="err"></h2>
+    <!--f2c1629ce072cfa662000f6863a76d40-->
+    <!--https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}-->
+    <div class="credits">
+        <p>UI Designer : MJ, Abdul, Subhani</h2>
+        <p>Logic Builder : Abdul, Subhani</h2>
+
+    </div>
+    <script>
+        const getweather = async () =>{
+            const city = document.getElementById("city-input").value;
+            const name = document.getElementById("name");
+            const temp = document.getElementById("temp");
+            const humidity = document.getElementById("humidity");
+            const condition = document.getElementById("condition");
+            const logo = document.getElementById("logo-condition");
+            const err = document.getElementById("err");
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=f2c1629ce072cfa662000f6863a76d40`;
+            const container = document.getElementById('container')
+            
+       
+            const getapi = await fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                if(data.name == undefined){
+                    err.innerHTML == 'This city is out of our reach please try another city!'
+                }
+
+                else{
+                    container.style.display = 'flex'
+                    name.innerHTML = data.name;
+                let result  =  data.main.temp - 273.15
+                temp.innerHTML =   'Temperature : '+result.toFixed(0) + "°C";
+                humidity.innerHTML  =  "Humidity "+data.main.humidity + "%"
+                condition.innerHTML  = data.weather[0].description
+
+
+                }
+
+                if(data.weather[0].main === 'Clouds'){
+                    logo.src = "images/clouds.png"
+                }
+                else if(data.weather[0].main === 'Drizzle'){
+                    logo.src = "images/drizzle.png"
+                }
+                else if(data.weather[0].main === 'Mist'){
+                    logo.src = "images/mist.png"
+                }
+                else if(data.weather[0].main === 'Clear'){
+                    logo.src = "images/clear.png"
+                }
+                else if(data.weather[0].main === 'Rain'){
+                    logo.src = "images/rain.png"
+                }
+
+            })
+
+        };
+    </script>
+</body>
+</html>
